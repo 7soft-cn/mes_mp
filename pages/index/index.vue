@@ -6,7 +6,7 @@
 		</view>
 		<div class="menus"  >
 		        <div class="menu_item" :class="curSelect==menu.id?'opacity':''" v-for="(menu,index) in menus" :key="index" @touchstart="touchstart(index)" @touchend="touchend">
-					<view class="iconfont" style="font-size: 80rpx;" v-bind:class="menu.icon"/>
+					<view class="iconfont" v-bind:class="menu.icon"/>
 		            {{menu.name}}
 		        </div>
 		    </div>
@@ -93,14 +93,14 @@
 				var that = this;
 				wx.showModal({
 				  title: '请输入完整姓名',
-				  content: '超级管理员',
+				  content: '',
 				  editable:true,
 				  placeholderText:"例:张三",
 				  success (res) {
 				    if (res.confirm) {
 				      console.log(res.content)
 					  that.bindUserNickName=res.content
-					  that.bindUserNickName='超级管理员'
+					  // that.bindUserNickName='体验账户'
 				    } else if (res.cancel) {
 				      that.bindUser();
 				    }
@@ -159,25 +159,27 @@
 		margin-bottom: 50rpx;
 	}
 
-	head {
+	.head {
+		margin-top: 5%;
 		display: flex;
 		justify-content: center;
 	}
-
 	.title {
-		margin-top: 5%;
-		font-size: 36rpx;
-		color: #8f8f94;
+		font-size: 50rpx;
+		color: #0689c5;
 	}
 	
 	.menus{
-		margin-top: 5%;
+		margin-top: 8%;
 	        display: flex;
 	        align-items: center;
 	        width:100%;
 	        flex-wrap: wrap;
 	    }
 	    .menu_item{
+			border: #555555;
+			border-radius: 5rpx;
+			border-width: 2rpx;
 	        display: flex;
 	        justify-content: center;
 	        align-items: center;
@@ -191,11 +193,8 @@
 	        opacity: 0.4;
 	        background: #e5e5e5;
 	    }
-	    .menu_item img{
-			margin-top: 10%;
-			width:20%;
-			height: 20px;
-	        margin-bottom: 3px;
-	        display: block;
+	    .menu_item view{
+			font-size: 200rpx;
+	        /* display: block; */
 	    }
 </style>
