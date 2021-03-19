@@ -44,7 +44,9 @@
 			}
 		},
 		onLoad() {
-			this.login();
+			this.login(); //重新登录
+			// let token=wx.getStorageSync('x-token')
+			// console.log('x-token=>' + token);
 		},
 		methods: {
 			login(){
@@ -54,7 +56,8 @@
 				    if (res.code) {
 				      //发起网络请求
 				      wx.request({
-				        url: 'https://mes.7soft.cn/api/base/wxLogin',
+				        // url: 'https://mes.7soft.cn/api/base/wxLogin',
+						url: 'http://10.10.1.9:8001/base/wxLogin',
 				        data: {
 				          code: res.code,
 						  nickName:that.bindUserNickName
@@ -67,8 +70,12 @@
 								  data:res.data.data.user
 								})
 								wx.setStorage({
-								  key:"token",
+								  key:"x-token",
 								  data:res.data.data.token
+								})
+								wx.setStorage({
+								  key:"x-user-id",
+								  data:res.data.data.user.ID
 								})
 								that.loginUser = wx.getStorageSync('loginUser')
 							}else{
