@@ -1,0 +1,45 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "掌上MES"
+			},
+			"disableScroll": true
+		},
+		{
+			"path": "pages/production/report",
+			"style": {
+				"navigationBarTitleText": "报工"
+			},
+			"disableScroll": true
+		},
+		{
+			"path": "pages/production/check",
+			"style": {
+				"navigationBarTitleText": "报工检"
+			},
+			"disableScroll": true
+		},
+		{
+			"path": "pages/device/check",
+			"style": {
+				"navigationBarTitleText": "设备检"
+			},
+			"disableScroll": true
+		},
+		{
+			"path": "pages/material/check",
+			"style": {
+				"navigationBarTitleText": "原料检"
+			},
+			"disableScroll": true
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
