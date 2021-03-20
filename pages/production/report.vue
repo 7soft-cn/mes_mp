@@ -4,11 +4,13 @@
 		<view class="head">
 			<text class="title">{{orderNo}}</text>
 		</view>
-		<view>
-			<view >
+		
+		<view class="data-detail">
+			<view class="line"></view>
+			<view class="data-select">
 			  <picker @change="bindPickerChange" value="currentIndex" range-key="processName" :range="reportDetails">
 			    <view class="picker">
-			      工序名称：{{reportDetails[currentIndex].processName}}
+			      工序名称：{{reportDetails[currentIndex].processName}}  (点击切换)
 			    </view>
 			  </picker>
 			</view>
@@ -20,27 +22,33 @@
 				<label>计划数量：{{reportDetails[currentIndex].quantity}}</label>
 				<br/>
 				<label>已报数量：{{reportDetails[currentIndex].completedQuantity}}</label>
-				<br/>
-				<label>本次数量：</label>
-				<input type="number" v-model="reportDetails[currentIndex].actualQuantity" focus placeholder="本次数量"/>
-				<button type="primary"  @click="submit">提交</button>
+				<view class="line"></view>
+				<view class="input-area">
+					<label>本次数量：</label>
+					<view class="input-border">
+						<input class="input-number" type="number" v-model.number="reportDetails[currentIndex].actualQuantity" focus placeholder="本次数量"/>
+					</view>
+				</view>
+				<button class="button-submit" type="primary"  @click="submit">提交</button>
+				<!-- <button type="primary"  @click="openPdf(pdfUrl)">打开PDF</button>
+				<web-view :src="pdfUrl" /> -->
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+import { apiServer } from "@/utils/api.js";
 export default {
 	data() {
 		return {
 			orderNo: "",
 			reportDetails:[],
 			currentIndex:0,
+			pdfUrl:"https://mes.7soft.cn/uploads/file/20210320081328.pdf"
 		}
 	},
 	onLoad() {
-		let token=wx.getStorageSync('x-token')
-		console.log('x-token=>' + token);
 		this.scan();
 	},
 	methods: {
@@ -48,7 +56,7 @@ export default {
 		scan() {
 			var that = this
 			wx.scanCode({
-				onlyFromCamera: true,
+				// onlyFromCamera: true,
 				scanType:['barCode', 'qrCode'],
 				success (res) {
 					that.orderNo=res.result;
@@ -67,7 +75,7 @@ export default {
 			let token = wx.getStorageSync('x-token')
 			let userId = wx.getStorageSync('x-user-id')
 			wx.request({
-			  url: 'http://10.10.1.9:8001/productionOrder/getWisReportDetails', 
+			  url: apiServer+'productionOrder/getWisReportDetails', 
 			  data: {
 			    orderNo: that.orderNo
 			  },
@@ -100,12 +108,59 @@ export default {
 		},
 		//提交
 		submit(){
-			// console.log(this.reportDetails[this.currentIndex].actualQuantity);
-			wx.showToast({
-			  title: "本次报工["+this.reportDetails[this.currentIndex].actualQuantity+"]",
-			  icon: 'success',
-			  duration: 1000
+			var that = this
+			let token = wx.getStorageSync('x-token')
+			let userId = wx.getStorageSync('x-user-id')
+			let reportDetail = that.reportDetails[that.currentIndex];
+			if(reportDetail.actualQuantity==0){
+				wx.showToast({
+				  title: '数量不得为0',
+				  icon:	'error',
+				  duration: 1000
+				})
+				return;
+			}
+			wx.request({
+				url: apiServer+'productionOrder/createWisReportDetails',
+				data: [reportDetail],
+				method:'POST',
+				header: {
+					'x-token': token,
+					'x-user-id': userId,
+				},
+				success (res) {
+					if(res.data.code==0){
+						wx.showToast({
+						  title: "本次报工["+reportDetail.actualQuantity+"]",
+						  icon: 'success',
+						  duration: 1000
+						})
+						that.getOrderReportDetail();
+					}else{
+						wx.showToast({
+						  title: res.data.msg,
+						  icon:	'none',
+						  duration: 1000
+						})
+					}
+					
+				},
 			})
+			
+		},
+		//打开PDF
+		openPdf(pdfUrl) {
+		      wx.downloadFile({//下载
+		        url: pdfUrl,//服务器上的pdf地址
+		        filePath: wx.env.USER_DATA_PATH + '/test.pdf',//自定义文件地址
+		        success: function (res) {
+		          var filePath = res.filePath
+		          wx.openDocument({//打开
+		            filePath: filePath,
+		            success: function (res) {}
+		          })
+		        }
+		      })
 		}
 	},
 }
@@ -119,14 +174,53 @@ export default {
 		justify-content: center;
 	}
 	
-	head {
+	.head {
+		margin-top: 3%;
 		display: flex;
 		justify-content: center;
 	}
 	
 	.title {
 		margin-top: 5%;
-		font-size: 36rpx;
+		font-size: 50rpx;
 		color: #8f8f94;
+	}
+	.line{
+		margin-top: 5%;
+		width:100%;
+		height:2rpx;
+		background:#8f8f94;
+	}
+	.data-detail{
+		/* margin-top: 5%; */
+	}
+	.data-select{
+		margin-top: 5%;
+	}
+	.picker{
+		/* color: #007AFF; */
+	}
+	.input-area{
+		margin-top: 3%;
+	}
+	.input-border{
+		box-sizing: border-box;
+		border-color: #8f8f94;
+		border-style: solid;
+		border-width: thin;
+	}
+	.input-area label{
+		align-self: center;
+		font-size: 40rpx;
+		color: #914800;
+	}
+	.input-number{
+		white-space: nowrap;
+		border: #000000;
+		height: 50rpx;
+		/* background-color: #8f8f94; */
+	}
+	.button-submit{
+		margin-top: 5%;
 	}
 </style>

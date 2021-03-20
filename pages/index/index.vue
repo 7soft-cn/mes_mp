@@ -14,6 +14,7 @@
 </template>
 
 <script>
+	import { apiServer } from "@/utils/api.js";
 	export default {
 		data() {
 			return {
@@ -56,8 +57,7 @@
 				    if (res.code) {
 				      //发起网络请求
 				      wx.request({
-				        // url: 'https://mes.7soft.cn/api/base/wxLogin',
-						url: 'http://10.10.1.9:8001/base/wxLogin',
+						url: apiServer+'base/wxLogin',
 				        data: {
 				          code: res.code,
 						  nickName:that.bindUserNickName
@@ -107,7 +107,7 @@
 				    if (res.confirm) {
 				      console.log(res.content)
 					  that.bindUserNickName=res.content
-					  // that.bindUserNickName='体验账户'
+					  that.bindUserNickName='孙雅'
 				    } else if (res.cancel) {
 				      that.bindUser();
 				    }
