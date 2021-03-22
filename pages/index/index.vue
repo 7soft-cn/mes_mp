@@ -105,9 +105,7 @@
 				  placeholderText:"例:张三",
 				  success (res) {
 				    if (res.confirm) {
-				      console.log(res.content)
 					  that.bindUserNickName=res.content
-					  // that.bindUserNickName='孙雅'
 				    } else if (res.cancel) {
 				      that.bindUser();
 				    }
