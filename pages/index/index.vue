@@ -32,9 +32,9 @@
 								path:'/pages/production/check'
 				            },{
 				                id:2,
-				                name:'设备检',
+				                name:'设备维护',
 				                icon:'el-icon-cpu',
-								path:'/pages/device/check'
+								path:'/pages/device/maintain'
 				            },{
 				                id:3,
 				                name:'原料检',
@@ -107,7 +107,7 @@
 				    if (res.confirm) {
 				      console.log(res.content)
 					  that.bindUserNickName=res.content
-					  that.bindUserNickName='孙雅'
+					  // that.bindUserNickName='孙雅'
 				    } else if (res.cancel) {
 				      that.bindUser();
 				    }

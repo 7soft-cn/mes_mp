@@ -22,7 +22,7 @@
 			"disableScroll": true
 		},
 		{
-			"path": "pages/device/check",
+			"path": "pages/device/maintain",
 			"style": {
 				"navigationBarTitleText": "设备检"
 			},
@@ -38,7 +38,7 @@
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "掌上MES",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}
