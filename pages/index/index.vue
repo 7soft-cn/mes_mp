@@ -40,7 +40,17 @@
 				                name:'原料检',
 				                icon:'el-icon-shopping-cart-full',
 								path:'/pages/material/check'
-				            }],
+				            },{
+				                id:4,
+				                name:'入库',
+				                icon:'el-icon-sell',
+								path:'/pages/warehouse/stock_in'
+				            },{
+							    id:5,
+							    name:'出库',
+							    icon:'el-icon-sold-out',
+								path:'/pages/warehouse/stock_out'
+							}],
 				            curSelect:null
 			}
 		},
@@ -199,7 +209,7 @@
 	        background: #e5e5e5;
 	    }
 	    .menu_item view{
-			font-size: 200rpx;
+			font-size: 3rem;
 	        /* display: block; */
 	    }
 </style>

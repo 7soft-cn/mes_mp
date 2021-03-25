@@ -34,6 +34,20 @@
 				"navigationBarTitleText": "原料检"
 			},
 			"disableScroll": true
+		},
+		{
+			"path": "pages/warehouse/stock_in",
+			"style": {
+				"navigationBarTitleText": "入库"
+			},
+			"disableScroll": true
+		},
+		{
+			"path": "pages/warehouse/stock_out",
+			"style": {
+				"navigationBarTitleText": "出库"
+			},
+			"disableScroll": true
 		}
 	],
 	"globalStyle": {
