@@ -56,72 +56,150 @@
 		},
 		onLoad() {
 			this.login(); //重新登录
-			// let token=wx.getStorageSync('x-token')
+			// uni.showModal({
+			//     title: '提示',
+			//     content: '这是一个模态弹窗',
+			//     success: function (res) {
+			//         if (res.confirm) {
+			//            uni.requestSubscribeMessage({
+			//              tmplIds: ['rpwCukJgLyhiZwwqwU70DxAc5GqtA3LvlbK39RCbUjw'],
+			//              success (res) {
+			//            	  uni.showToast({
+			//            	    title: "订阅成功",
+			//            	    icon: 'success',
+			//            	    duration: 1000
+			//            	  })
+			//              },
+			//              complete(res) {
+			//            	  console.log(res)
+			//            	  uni.showToast({
+			//            	    title: "订阅提醒完成成功",
+			//            	    icon: 'success',
+			//            	    duration: 1000
+			//            	  })
+			//              },
+			//            })
+			//             console.log('用户点击确定');
+			//         } else if (res.cancel) {
+			//             console.log('用户点击取消');
+			//         }
+			//     }
+			// });
+			// let token=uni.getStorageSync('x-token')
 			// console.log('x-token=>' + token);
 		},
 		methods: {
+			//登录
 			login(){
 				var that = this;
-				wx.login({
-				  success(res){
-				    if (res.code) {
-				      //发起网络请求
-				      wx.request({
-						url: apiServer+'base/wxLogin',
-				        data: {
-				          code: res.code,
-						  nickName:that.bindUserNickName
-				        },
-						success (res) {
-							if(res.data.code==0){
-								// wx.env.loginUser=res.data.data.user;
-								wx.setStorage({
-								  key:"loginUser",
-								  data:res.data.data.user
-								})
-								wx.setStorage({
-								  key:"x-token",
-								  data:res.data.data.token
-								})
-								wx.setStorage({
-								  key:"x-user-id",
-								  data:res.data.data.user.ID
-								})
-								that.loginUser = wx.getStorageSync('loginUser')
-							}else{
-								wx.showToast({
-								  title: "自动登录失败",
-								  icon: 'error',
-								  duration: 1000
-								})
-								that.bindUser();
-							}
+				// #ifdef APP-PLUS||H5
+				var code = '123'
+				that.loginApi(code);
+				// #endif
+				
+				// #ifndef APP-PLUS
+				that.loginMP()
+				// #endif
+			},
+			//登录小程序
+			loginMP(){
+				var that = this;
+				uni.login({
+					success(res){
+						if (res.code) {
+							that.loginApi(res.code)
+						}else{
+							console.log('登录失败！' + res.errMsg);
+							that.bindUser();
 						}
-				      });
-				    } else {
-				      console.log('登录失败！' + res.errMsg);
-					  that.bindUser();
+				    },
+					fail(res){
+						console.log('登录失败！' + res.errMsg);
+						that.bindUser();
 				    }
-				  }
 				});
+			},
+			//登录到服务器
+			loginApi(code) {
+				var that = this;
+				var platform = ''
+				// #ifdef APP-PLUS||H5
+				platform = 'APP-PLUS'
+				// #endif
+				
+				// #ifdef MP-WEIXIN
+				platform = 'MP-WEIXIN'
+				// #endif
+				
+				if (code) {
+				  //发起网络请求
+				  uni.request({
+					url: apiServer+'base/wxLogin',
+				    data: {
+						platform:platform,
+						code: code,
+						nickName:that.bindUserNickName
+				    },
+					success (res) {
+						if(res.data.code==0){
+							uni.setStorage({
+							  key:"loginUser",
+							  data:res.data.data.user
+							})
+							uni.setStorage({
+							  key:"x-token",
+							  data:res.data.data.token
+							})
+							uni.setStorage({
+							  key:"x-user-id",
+							  data:res.data.data.user.ID
+							})
+							that.loginUser = uni.getStorageSync('loginUser')
+						}else{
+							uni.showToast({
+							  title: "自动登录失败",
+							  icon: 'error',
+							  duration: 1000
+							})
+							that.bindUser();
+						}
+					}
+				  });
+			}
 			},
 			//绑定用户
 			bindUser(){
 				var that = this;
-				wx.showModal({
-				  title: '请输入完整姓名',
-				  content: '',
-				  editable:true,
-				  placeholderText:"例:张三",
-				  success (res) {
-				    if (res.confirm) {
-					  that.bindUserNickName=res.content
-				    } else if (res.cancel) {
-				      that.bindUser();
-				    }
-					that.login();
-				  }
+				uni.setStorage({
+				  key:"nickName",
+				  data:''
 				})
+				uni.navigateTo({
+					url:'/pages/index/login'
+				})
+				that.bindUserNickName = uni.getStorageSync('nickName')
+				if (that.bindUserNickName.length == 0)
+				{
+					uni.navigateTo({
+						url:'/pages/index/login'
+					})
+				}else{
+					that.login();
+				}
+				// uni.showModal({
+				//   title: '请输入完整姓名',
+				//   content: '',
+				//   editable:true,
+				//   placeholderText:"例:张三",
+				//   success (res) {
+				//     if (res.confirm) {
+				// 	  that.bindUserNickName=res.content
+				//     } else if (res.cancel) {
+				//       that.bindUser();
+				//     }
+				// 	that.login();
+				//   }
+				// })
 			},
 			touchstart:function(e){
 				var that = this;
@@ -135,7 +213,7 @@
 			touchend:function(){
 				var that = this;
 				let path = that.menus[that.curSelect].path
-				wx.navigateTo({
+				uni.navigateTo({
 					url:path
 				})
 				that.curSelect = null;

@@ -3,7 +3,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "掌上MES"
+				"navigationBarTitleText": "LEAN MES"
 			},
 			"disableScroll": true
 		},
@@ -49,11 +49,21 @@
 			},
 			"disableScroll": true
 		}
-	],
+	    ,{
+            "path" : "pages/index/login",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "掌上MES",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "LEAN MES",
+		"navigationBarBackgroundColor": "#191a23",
+		"backgroundColor": "#f8f8f8",
+		"enablePullDownRefresh":false
 	}
 }

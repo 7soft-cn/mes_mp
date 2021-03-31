@@ -78,8 +78,8 @@ export default {
 	    }
 	  },
 	onLoad() {
-		this.token = wx.getStorageSync('x-token')
-		this.userId = wx.getStorageSync('x-user-id')
+		this.token = uni.getStorageSync('x-token')
+		this.userId = uni.getStorageSync('x-user-id')
 		this.getDeviceMaintainTypes();
 		this.scan();
 	},
@@ -87,15 +87,16 @@ export default {
 		//扫描获取
 		scan() {
 			var that = this
-			wx.scanCode({
+			//允许从相机和相册扫码
+			uni.scanCode({
 				// onlyFromCamera: true,
 				scanType:['barCode', 'qrCode'],
-				success (res) {
+				success: function (res) {
 					that.deviceNo=res.result;
 					that.getDevice()
 				},
-				fail (res) {
-					wx.navigateBack({
+				fail: function (res) {
+					uni.navigateBack({
 					  delta: 2
 					})
 				}
@@ -104,7 +105,7 @@ export default {
 		//获取维护类型
 		getDeviceMaintainTypes(){
 			var that = this
-			wx.request({
+			uni.request({
 				url: apiServer+'sysDictionary/findSysDictionary', 
 				data: {
 					type: 'deviceMaintainType'
@@ -118,7 +119,7 @@ export default {
 					that.deviceMaintainTypes=res.data.data.resysDictionary.sysDictionaryDetails;
 				},
 				fail (res) {
-					wx.navigateBack({
+					uni.navigateBack({
 					  delta: 2
 					})
 				}
@@ -127,7 +128,7 @@ export default {
 		//查询设备
 		getDevice(){
 			var that = this
-			wx.request({
+			uni.request({
 				url: apiServer+'device/findEamDevice', 
 				data: {
 					deviceNo: that.deviceNo
@@ -141,7 +142,7 @@ export default {
 					if(res.data.code==0){
 						that.deviceInfo=res.data.data.redevice;
 					}else{
-						wx.showToast({
+						uni.showToast({
 							title: res.data.msg,
 							icon:	'error',
 							duration: 1000
@@ -149,7 +150,7 @@ export default {
 					}
 				},
 				fail (res) {
-					wx.navigateBack({
+					uni.navigateBack({
 					  delta: 2
 					})
 				}
@@ -162,11 +163,11 @@ export default {
 		//提交
 		submit(type){
 			var that = this
-			wx.showModal({
+			uni.showModal({
 			  title: '是否已经完成？',
 			  success (res) {
 			    if (res.confirm) {
-					wx.request({
+					uni.request({
 						url: apiServer+'device/createEamDeviceMaintainRecord', 
 						data: {
 							deviceId: that.deviceInfo.ID,
@@ -180,14 +181,14 @@ export default {
 						},
 						success (res) {
 							if(res.data.code==0){
-								wx.showToast({
+								uni.showToast({
 									title: '提交成功',
 									icon:	'success',
 									duration: 1000
 								})
 								that.maintainRemark=''
 							}else{
-								wx.showToast({
+								uni.showToast({
 									title: res.date.msg,
 									icon:	'error',
 									duration: 1000
@@ -196,7 +197,7 @@ export default {
 						}
 					})
 			    } else if (res.cancel) {
-			      wx.showToast({
+			      uni.showToast({
 			        title: '已取消',
 			        icon:'none',
 			        duration: 1000

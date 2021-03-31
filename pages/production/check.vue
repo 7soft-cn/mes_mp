@@ -20,14 +20,14 @@ export default {
 	methods: {
 		scan() {
 			var that = this
-			wx.scanCode({
+			uni.scanCode({
 				onlyFromCamera: true,
 				scanType:['barCode', 'qrCode'],
 				success (res) {
 					that.orderNo=res.result;
 				},
 				fail (res) {
-					wx.navigateBack({
+					uni.navigateBack({
 					  delta: 2
 					})
 				}

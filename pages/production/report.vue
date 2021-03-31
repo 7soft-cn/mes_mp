@@ -55,7 +55,7 @@ export default {
 		//扫描获取单号
 		scan() {
 			var that = this
-			wx.scanCode({
+			uni.scanCode({
 				// onlyFromCamera: true,
 				scanType:['barCode', 'qrCode'],
 				success (res) {
@@ -63,7 +63,7 @@ export default {
 					that.getOrderReportDetail();
 				},
 				fail (res) {
-					wx.navigateBack({
+					uni.navigateBack({
 					  delta: 2
 					})
 				}
@@ -72,9 +72,9 @@ export default {
 		//获取报工明细
 		getOrderReportDetail(){
 			var that = this
-			let token = wx.getStorageSync('x-token')
-			let userId = wx.getStorageSync('x-user-id')
-			wx.request({
+			let token = uni.getStorageSync('x-token')
+			let userId = uni.getStorageSync('x-user-id')
+			uni.request({
 			  url: apiServer+'productionOrder/getWisReportDetails', 
 			  data: {
 			    orderNo: that.orderNo
@@ -90,12 +90,12 @@ export default {
 			  },
 			  complete (res) {
 				  if (that.reportDetails==[] || that.reportDetails ==null){
-					  wx.showToast({
+					  uni.showToast({
 					    title: "请扫描有效单号",
 					    icon: 'error',
 					    duration: 1000
 					  })
-					  wx.navigateBack({
+					  uni.navigateBack({
 					    delta: 2
 					  })
 					}
@@ -109,18 +109,18 @@ export default {
 		//提交
 		submit(){
 			var that = this
-			let token = wx.getStorageSync('x-token')
-			let userId = wx.getStorageSync('x-user-id')
+			let token = uni.getStorageSync('x-token')
+			let userId = uni.getStorageSync('x-user-id')
 			let reportDetail = that.reportDetails[that.currentIndex];
 			if(reportDetail.actualQuantity==0){
-				wx.showToast({
+				uni.showToast({
 				  title: '数量不得为0',
 				  icon:	'error',
 				  duration: 1000
 				})
 				return;
 			}
-			wx.request({
+			uni.request({
 				url: apiServer+'productionOrder/createWisReportDetails',
 				data: [reportDetail],
 				method:'POST',
@@ -130,14 +130,14 @@ export default {
 				},
 				success (res) {
 					if(res.data.code==0){
-						wx.showToast({
+						uni.showToast({
 						  title: "本次报工["+reportDetail.actualQuantity+"]",
 						  icon: 'success',
 						  duration: 1000
 						})
 						that.getOrderReportDetail();
 					}else{
-						wx.showToast({
+						uni.showToast({
 						  title: res.data.msg,
 						  icon:	'none',
 						  duration: 1000
@@ -150,12 +150,12 @@ export default {
 		},
 		//打开PDF
 		openPdf(pdfUrl) {
-		      wx.downloadFile({//下载
+		      uni.downloadFile({//下载
 		        url: pdfUrl,//服务器上的pdf地址
-		        filePath: wx.env.USER_DATA_PATH + '/test.pdf',//自定义文件地址
+		        filePath: uni.env.USER_DATA_PATH + '/test.pdf',//自定义文件地址
 		        success: function (res) {
 		          var filePath = res.filePath
-		          wx.openDocument({//打开
+		          uni.openDocument({//打开
 		            filePath: filePath,
 		            success: function (res) {}
 		          })
