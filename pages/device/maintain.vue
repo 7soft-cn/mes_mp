@@ -88,7 +88,9 @@ export default {
 	},
 	mounted(){
 		//页面加载完直接扫码
-		// this.scan();
+		// #ifdef  MP
+			this.scan();
+		// #endif
 	},
 	methods: {
 		//扫描获取
@@ -151,12 +153,9 @@ export default {
 					}else{
 						uni.showToast({
 							title: res.data.msg,
-							icon:	'error',
-							duration: 1000
+							duration: 5000
 						})
-						uni.navigateBack({
-						  delta: 2
-						})
+						that.deviceNo = that.token
 					}
 				},
 				fail (res) {
@@ -200,8 +199,7 @@ export default {
 							}else{
 								uni.showToast({
 									title: res.date.msg,
-									icon:	'error',
-									duration: 1000
+									duration: 5000
 								})
 							}
 						}

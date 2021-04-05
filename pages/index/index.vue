@@ -100,12 +100,12 @@
 			//登录
 			login() {
 				var that = this;
-				if (uni.getStorageSync('x-token').length > 0) {
-					that.token = uni.getStorageSync('x-token')
-					that.userId = uni.getStorageSync('x-user-id')
-					that.loginUser = uni.getStorageSync('loginUser')
-					return
-				}
+				// if (uni.getStorageSync('x-token').length > 0) {
+				// 	that.token = uni.getStorageSync('x-token')
+				// 	that.userId = uni.getStorageSync('x-user-id')
+				// 	that.loginUser = uni.getStorageSync('loginUser')
+				// 	return
+				// }
 				// #ifdef APP-PLUS||H5
 				var code = plus.device.uuid;
 				console.log(code)
