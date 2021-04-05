@@ -1,5 +1,8 @@
 <template>
-	<view class="content">
+	<view v-if="orderNo.length==0" class="scan-order">
+		<button  class="button-submit" type="default"  @click="scan">扫单号</button>
+	</view>
+	<view v-else class="content">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
 		<view class="head">
 			<text class="title">{{orderNo}}</text>
@@ -15,7 +18,13 @@ export default {
 		}
 	},
 	onLoad() {
-		this.scan();
+		// this.scan();
+	},
+	mounted(){
+		//页面加载完直接扫码
+		// #ifdef  MP
+			this.scan();
+		// #endif
 	},
 	methods: {
 		scan() {
@@ -38,21 +47,5 @@ export default {
 </script>
 
 <style>
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
 	
-	head {
-		display: flex;
-		justify-content: center;
-	}
-	
-	.title {
-		margin-top: 5%;
-		font-size: 36rpx;
-		color: #8f8f94;
-	}
 </style>

@@ -2,7 +2,7 @@
 /node_modules
 /unpackage/dist/
 /unpackage/release/
-/unpackage/chache/
+/unpackage/cache/
 
 .DS_Store
 

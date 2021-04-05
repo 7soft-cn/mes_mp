@@ -1,5 +1,8 @@
 <template>
-	<view class="content">
+	<view v-if="deviceNo.length == 0" class="scan-order">
+		<button class="button-submit" type="default"  @click="scan">扫设备</button>
+	</view>
+	<view v-else class="content">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
 		<view class="head">
 			<text class="title">{{deviceNo}}</text>
@@ -81,7 +84,11 @@ export default {
 		this.token = uni.getStorageSync('x-token')
 		this.userId = uni.getStorageSync('x-user-id')
 		this.getDeviceMaintainTypes();
-		this.scan();
+		// this.scan();
+	},
+	mounted(){
+		//页面加载完直接扫码
+		// this.scan();
 	},
 	methods: {
 		//扫描获取
@@ -146,6 +153,9 @@ export default {
 							title: res.data.msg,
 							icon:	'error',
 							duration: 1000
+						})
+						uni.navigateBack({
+						  delta: 2
 						})
 					}
 				},
@@ -212,61 +222,5 @@ export default {
 </script>
 
 <style>
-	.content {
-		display: flex;
-		width: 100%;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
 	
-	.head {
-		margin-top: 3%;
-		display: flex;
-		justify-content: center;
-	}
-	
-	.title {
-		margin-top: 5%;
-		font-size: 50rpx;
-		color: #8f8f94;
-	}
-	.line{
-		margin-top: 5%;
-		width:100%;
-		height:2rpx;
-		background:#8f8f94;
-	}
-	.data-detail{
-		/* margin-top: 5%; */
-	}
-	.data-select{
-		margin-top: 5%;
-	}
-	.picker{
-		/* color: #007AFF; */
-	}
-	.input-area{
-		margin-top: 3%;
-	}
-	.input-border{
-		box-sizing: border-box;
-		border-color: #8f8f94;
-		border-style: solid;
-		border-width: thin;
-	}
-	.input-area label{
-		align-self: center;
-		font-size: 40rpx;
-		color: #914800;
-	}
-	.input-number{
-		white-space: nowrap;
-		border: #000000;
-		height: 50rpx;
-		/* background-color: #8f8f94; */
-	}
-	.button-submit{
-		margin-top: 5%;
-	}
 </style>
